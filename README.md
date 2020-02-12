@@ -1,4 +1,4 @@
-# Named Entity Recognition
+﻿# Named Entity Recognition
 
 This Dataiku DSS plugin provides a tool for extracting Named Entities (i.e. People names, Dates, Places, etc) from texts.
 
