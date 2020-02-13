@@ -49,7 +49,7 @@ def get_from_cache(url: str, cache_dir: str = None) -> str:
                     temp_file.write(chunk)
         progress.close()
 
-    return cache_path
+    return(cache_path)
 
 
 def cached_path(url_or_filename: str, cache_dir: str) -> str:
@@ -65,10 +65,10 @@ def cached_path(url_or_filename: str, cache_dir: str) -> str:
 
     if parsed.scheme in ('http', 'https'):
         # URL, so get it from the cache (downloading if necessary)
-        return get_from_cache(url_or_filename, dataset_cache)
+        return(get_from_cache(url_or_filename, dataset_cache))
     elif parsed.scheme == '' and os.path.exists(url_or_filename):
         # File, and it exists.
-        return url_or_filename
+        return(url_or_filename)
     elif parsed.scheme == '':
         # File, but it doesn't exist.
         raise FileNotFoundError("file {} not found".format(url_or_filename))
@@ -98,7 +98,7 @@ class CustomSequenceTagger(SequenceTagger):
 
         if model_file is not None:
             tagger: SequenceTagger = SequenceTagger.load(model_file)
-            return tagger
+            return(tagger)
 
 
 #############################
@@ -166,4 +166,4 @@ def extract_entities(text_column, format):
     cols = [col for col in entity_df.columns.tolist() if col != 'sentence']
     entity_df = entity_df[cols]
 
-    return entity_df
+    return(entity_df)

@@ -77,4 +77,4 @@ def extract_entities(text_column, format):
     cols.insert(0, cols.pop(cols.index('sentence')))
     entity_df = entity_df[cols]
 
-    return entity_df
+    return(entity_df)
