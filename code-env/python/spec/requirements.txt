@@ -12,3 +12,4 @@ https://github.com/explosion/spacy-models/archive/es_core_news_md-2.2.5.tar.gz
 https://github.com/explosion/spacy-models/archive/en_core_web_lg-2.2.5.tar.gz
 https://github.com/explosion/spacy-models/archive/el_core_news_md-2.2.5.tar.gz
 https://github.com/explosion/spacy-models/archive/de_core_news_md-2.2.5.tar.gz
+https://github.com/explosion/spacy-models/archive/xx_ent_wiki_sm-2.2.0.tar.gz
