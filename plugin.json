@@ -1,13 +1,14 @@
 {
     "id": "named-entity-recognition",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "meta": {
         "label": "Named Entity Recognition",
-        "description": "Identify “real-world objects” (i.e. People names, Dates, Places, etc) in texts",
-        "author": "Dataiku (Hicham El Boukkouri)",
-        "icon": "icon-tag",
+        "category": "Natural Language Processing",
+        "description": "Identify “real-world objects” (people names, dates, places, etc.) in a text",
+        "author": "Dataiku (Alex COMBESSIE and Hicham EL BOUKKOURI)",
+        "icon": "icon-tags",
         "licenseInfo": "Apache Software License",
-        "url": "https://www.dataiku.com/dss/plugins/info/named-entity-recognition.html",
+        "url": "https://www.dataiku.com/product/plugins/named-entity-recognition/",
         "tags": ["NLP"]
     }
 }
