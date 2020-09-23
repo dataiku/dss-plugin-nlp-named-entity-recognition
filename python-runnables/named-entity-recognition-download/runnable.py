@@ -125,18 +125,18 @@ class MyRunnable(Runnable):
             @staticmethod
             def load(model: str):
                 model_file = None
-                aws_resource_path = 'https://s3.eu-central-1.amazonaws.com/alan-nlp/resources/models-v0.2'
+                aws_resource_path = "https://nlp.informatik.hu-berlin.de/resources/models"
 
                 if model.lower() == 'ner':
                     base_path = '/'.join([aws_resource_path,
-                                          'NER-conll03--h256-l1-b32-%2Bglove%2Bnews-forward%2Bnews-backward--v0.2',
-                                          'en-ner-conll03-v0.2.pt'])
+                                          'ner',
+                                          'en-ner-conll03-v0.4.pt'])
                     model_file = cached_path(base_path, cache_dir='models')
 
                 if model.lower() == 'ner-ontonotes':
                     base_path = '/'.join([aws_resource_path,
-                                          'NER-ontoner--h256-l1-b32-%2Bcrawl%2Bnews-forward%2Bnews-backward--v0.2',
-                                          'en-ner-ontonotes-v0.2.pt'])
+                                          'ner-ontonotes',
+                                          'en-ner-ontonotes-v0.4.pt'])
                     model_file = cached_path(base_path, cache_dir='models')
 
                 if model_file is not None:
