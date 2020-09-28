@@ -1,57 +1,22 @@
 # -*- coding: utf-8 -*-
 import json
-import logging
 from collections import defaultdict
 import pandas as pd
 import spacy
-from dataiku.customrecipe import *
 
-logging.basicConfig(format='[NER RECIPE] %(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-
-
-#############################
-# Loading SpaCy
-#############################
-
-recipe_config = get_recipe_config()
-LANGUAGE = recipe_config.get('text_language_spacy', False)
-
-try:
-    nlp = spacy.load(LANGUAGE)
-    logger.info("Successfully loaded SpaCy's {} model.".format(LANGUAGE))
-except IOError:
-    import sys
-    from subprocess import Popen, PIPE
-
-    logger.info(
-        "SpaCy's {} model not found. Attempting an install...".format(LANGUAGE))
-
-    # sys.executable returns the complete path to the python executable of the current process
-    command = [sys.executable, "-m", "spacy", "download", LANGUAGE]
-
-    logger.warning("Running the command: {}".format(' '.join(command)))
-    p = Popen(command, stdout=PIPE, stderr=PIPE)
-    output, err = p.communicate()
-    for line in output.decode().split('\n'):
-        logger.info(line)
-    if err:
-        logger.warning(err)
-
-    try:
-        nlp = spacy.load(LANGUAGE)
-        logger.info("Successfully installed SpaCy's {} model.".format(LANGUAGE))
-    except:
-        raise Exception("Could not download SpaCy's model, probably because you don't have admin rights over the plugin code environment.")
+SPACY_LANGUAGE_MODELS = {
+    "en": "en_core_web_sm",
+    "es": "es_core_news_sm",
+    "zh": "zh_core_web_sm",
+    "pl": "nb_core_news_sm",
+    "fr": "fr_core_news_sm",
+    "de": "de_core_news_sm",
+}
 
 
-#############################
-# NER Function
-#############################
-
-def extract_entities(text_column, format):
+def extract_entities(text_column, format: bool, language: str):
     # Tag sentences
+    nlp = spacy.load(SPACY_LANGUAGE_MODELS[language])
     docs = nlp.pipe(text_column.values)
 
     # Extract entities
@@ -62,19 +27,17 @@ def extract_entities(text_column, format):
             df_row[entity.label_].append(entity.text)
 
         if format:
-            df_row = {
-                'sentence': doc.text,
-                'entities': json.dumps(df_row)}
+            df_row = {"sentence": doc.text, "entities": json.dumps(df_row)}
         else:
             for k, v in df_row.items():
                 df_row[k] = json.dumps(v)
-            df_row['sentence'] = doc.text
+            df_row["sentence"] = doc.text
 
         entity_df = entity_df.append(df_row, ignore_index=True)
 
     # Put 'sentence' column first
     cols = sorted(list(entity_df.columns))
-    cols.insert(0, cols.pop(cols.index('sentence')))
+    cols.insert(0, cols.pop(cols.index("sentence")))
     entity_df = entity_df[cols]
 
     return entity_df

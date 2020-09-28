@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
-import os
-import gzip
-import zipfile
-import requests
-
-from flair.file_utils import *
-from flair.embeddings import *
-from flair.models.sequence_tagger_model import *
+import logging
+from time import time
 
 import dataiku
 from dataiku.runnables import Runnable
+
+from ner_utils_flair import CustomSequenceTagger
 
 
 class MyRunnable(Runnable):
@@ -29,120 +25,31 @@ class MyRunnable(Runnable):
         If the runnable will return some progress info, have this function return a tuple of
         (target, unit) where unit is one of: SIZE, FILES, RECORDS, NONE
         """
-        return (100, 'NONE')
+        return (100, "NONE")
 
     def run(self, progress_callback):
 
         # Retrieving parameters
-        output_folder_name = self.config.get('outputName', '')
+        output_folder_name = self.config.get("folder_name", "")
 
         # Creating new Managed Folder if needed
         project = self.client.get_project(self.project_key)
         output_folder_found = False
-
         for folder in project.list_managed_folders():
-            if output_folder_name == folder['name']:
-                output_folder = project.get_managed_folder(folder['id'])
+            if output_folder_name == folder["name"]:
+                output_folder = project.get_managed_folder(folder["id"])
                 output_folder_found = True
                 break
-
         if not output_folder_found:
             output_folder = project.create_managed_folder(output_folder_name)
-
         output_folder = dataiku.Folder(output_folder.get_definition()["id"], project_key=self.project_key)
+        if output_folder.get_info().get("type") != "Filesystem":
+            raise TypeError("Please store the model on the server filesystem")
         output_folder_path = output_folder.get_path()
 
-        #######################################
-        # Downloading the model
-        #######################################
-
-        CACHE_ROOT = output_folder_path
-
-        def get_from_cache(url: str, cache_dir: str = None) -> str:
-            """
-            Given a URL, look for the corresponding dataset in the local cache.
-            If it's not there, download it. Then return the path to the cached file.
-            """
-
-            os.makedirs(cache_dir, exist_ok=True)
-
-            filename = re.sub(r'.+/', '', url)
-            # get cache path to put the file
-            cache_path = os.path.join(cache_dir, filename)
-            if os.path.exists(cache_path):
-                return cache_path
-
-            # make HEAD request to check ETag
-            response = requests.head(url)
-            if response.status_code != 200:
-                raise IOError("HEAD request failed for url {}".format(url))
-
-            if not os.path.exists(cache_path):
-
-                # GET file object
-                req = requests.get(url, stream=True)
-                content_length = req.headers.get('Content-Length')
-                total = int(
-                    content_length) if content_length is not None else None
-                progress = Tqdm.tqdm(unit="B", total=total)
-                with open(cache_path, 'wb') as temp_file:
-                    for chunk in req.iter_content(chunk_size=1024):
-                        if chunk:  # filter out keep-alive new chunks
-                            progress.update(len(chunk))
-                            temp_file.write(chunk)
-
-                progress.close()
-
-            return cache_path
-
-        def cached_path(url_or_filename: str, cache_dir: str) -> str:
-            """
-            Given something that might be a URL (or might be a local path),
-            determine which. If it's a URL, download the file and cache it, and
-            return the path to the cached file. If it's already a local path,
-            make sure the file exists and then return the path.
-            """
-            dataset_cache = os.path.join(CACHE_ROOT, cache_dir)
-
-            parsed = urlparse(url_or_filename)
-
-            if parsed.scheme in ('http', 'https'):
-                # URL, so get it from the cache (downloading if necessary)
-                return get_from_cache(url_or_filename, dataset_cache)
-            elif parsed.scheme == '' and os.path.exists(url_or_filename):
-                # File, and it exists.
-                return url_or_filename
-            elif parsed.scheme == '':
-                # File, but it doesn't exist.
-                raise FileNotFoundError(
-                    "file {} not found".format(url_or_filename))
-            else:
-                # Something unknown
-                raise ValueError(
-                    "unable to parse {} as a URL or as a local path".format(url_or_filename))
-
-        class CustomSequenceTagger(SequenceTagger):
-            @staticmethod
-            def load(model: str):
-                model_file = None
-                aws_resource_path = "https://nlp.informatik.hu-berlin.de/resources/models"
-
-                if model.lower() == 'ner':
-                    base_path = '/'.join([aws_resource_path,
-                                          'ner',
-                                          'en-ner-conll03-v0.4.pt'])
-                    model_file = cached_path(base_path, cache_dir='models')
-
-                if model.lower() == 'ner-ontonotes':
-                    base_path = '/'.join([aws_resource_path,
-                                          'ner-ontonotes',
-                                          'en-ner-ontonotes-v0.4.pt'])
-                    model_file = cached_path(base_path, cache_dir='models')
-
-                if model_file is not None:
-                    tagger: SequenceTagger = SequenceTagger.load(model_file)
-                    return tagger
-
-        tagger = CustomSequenceTagger.load('ner-ontonotes')
-
-        return "<br><span>The model was downloaded successfuly !</span>"
+        logging.info("Downloading Flair model...")
+        start = time()
+        CustomSequenceTagger.load(model="ner-ontonotes-fast", cache_path=output_folder_path)
+        result_message = "Downloading Flair model: Done in {:.2f} seconds.".format(time() - start)
+        logging.info(result_message)
+        return result_message

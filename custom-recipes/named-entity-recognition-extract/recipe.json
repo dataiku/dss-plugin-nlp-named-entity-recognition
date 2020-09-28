@@ -1,14 +1,11 @@
 {
     "meta": {
-        "label": "Extract Named Entities",
-        "description": "Identify “real-world objects” (i.e. People names, Dates, Places, etc) in a text column.",
+        "label": "Named Entity Recognition",
+        "description": "Identify “real-world objects” (i.e. People names, Dates, Places, etc) in a text column",
         "icon": "icon-tag"
     },
-
     "kind": "PYTHON",
-
     "selectableFromDataset": "input_dataset",
-
     "inputRoles": [
         {
             "name": "input_dataset",
@@ -21,31 +18,29 @@
         {
             "name": "model_folder",
             "label": "Model folder",
-            "description": "A managed folder for saving the NER model (only required if using Flair).",
+            "description": "A managed folder for saving the NER model (only required if using Flair)",
             "arity": "UNARY",
             "required": false,
             "acceptsManagedFolder": true,
-            "acceptsDataset": false
+            "acceptsDataset": false,
+            "mustBeStrictlyType": "Filesystem"
         }
     ],
-
     "outputRoles": [
         {
             "name": "output_dataset",
             "label": "Output dataset",
-            "description": "A dataset with the input texts and their corresponding entities.",
+            "description": "A dataset with the input texts and their corresponding entities",
             "arity": "UNARY",
             "required": true,
             "acceptsDataset": true
         }
     ],
-
     "params": [
         {
             "name": "text_column_name",
             "label": "Text column",
             "type": "COLUMN",
-            "description": "Select a column to extract named entities.",
             "mandatory": true,
             "columnRole": "input_dataset"
         },
