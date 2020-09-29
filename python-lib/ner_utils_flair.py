@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import logging
 import re
 import json
 import requests
@@ -44,6 +45,7 @@ def get_from_cache(url: str, cache_dir: str = None) -> str:
     # get cache path to put the file
     cache_path = os.path.join(cache_dir, filename)
     if os.path.exists(cache_path):
+        logging.info("File {} found in cache".format(filename))
         return cache_path
 
     # make HEAD request to check ETag
@@ -52,6 +54,7 @@ def get_from_cache(url: str, cache_dir: str = None) -> str:
         raise IOError("HEAD request failed for url {}".format(url))
 
     if not os.path.exists(cache_path):
+        logging.info("File {} not found in cache, downloading from URL {}...".format(filename, url))
         req = requests.get(url, stream=True)
         content_length = req.headers.get("Content-Length")
         total = int(content_length) if content_length is not None else None
@@ -128,12 +131,11 @@ PATTERN = r"({}|{})".format(
 matcher = re.compile(PATTERN)
 
 
-def extract_entities(text_column, format: bool):
+def extract_entities(text_column, format, tagger):
     # Create Sentences
     sentences = [Sentence(text, use_tokenizer=True) for text in text_column.values]
 
     # Tag Sentences
-    tagger = SequenceTagger.load("ner-ontonotes-fast")
     tagger.predict(sentences)
 
     # Retrieve entities

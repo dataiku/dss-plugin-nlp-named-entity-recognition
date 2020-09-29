@@ -3,7 +3,8 @@ body {
 }
 
 input,
-textarea {
+textarea,
+select {
   width: 100%;
   box-shadow: none;
   outline: none;

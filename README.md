@@ -1,6 +1,6 @@
-# Named Entity Recognition
+# Named Entity Recognition Plugin
 
-This Dataiku DSS plugin provides a recipe, macro and webapp  to recognize Named Entities (people, dates, places, etc.) in text data.
+This Dataiku DSS plugin provides a recipe, macro and webapp to recognize Named Entities (people, dates, places, etc.) in text data.
 
 Documentation: https://www.dataiku.com/product/plugins/named-entity-recognition/
 

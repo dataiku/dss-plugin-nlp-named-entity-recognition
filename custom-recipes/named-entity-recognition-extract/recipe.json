@@ -10,15 +10,15 @@
         {
             "name": "input_dataset",
             "label": "Input dataset",
-            "description": "The dataset that contains your texts.",
+            "description": "Dataset containing the text data to analyze",
             "arity": "UNARY",
             "required": true,
             "acceptsDataset": true
         },
         {
             "name": "model_folder",
-            "label": "Model folder",
-            "description": "A managed folder for saving the NER model (only required if using Flair)",
+            "label": "Flair model (optional)",
+            "description": "Folder containing Flair model weights",
             "arity": "UNARY",
             "required": false,
             "acceptsManagedFolder": true,
@@ -30,7 +30,7 @@
         {
             "name": "output_dataset",
             "label": "Output dataset",
-            "description": "A dataset with the input texts and their corresponding entities",
+            "description": "Dataset with the input text and the corresponding entities",
             "arity": "UNARY",
             "required": true,
             "acceptsDataset": true
@@ -38,19 +38,31 @@
     ],
     "params": [
         {
+            "name": "separator_input",
+            "label": "Input parameters",
+            "type": "SEPARATOR"
+        },
+        {
             "name": "text_column_name",
             "label": "Text column",
             "type": "COLUMN",
             "mandatory": true,
-            "columnRole": "input_dataset"
+            "columnRole": "input_dataset",
+            "allowedColumnTypes": [
+                "string"
+            ]
         },
         {
             "visibilityCondition": "model.ner_model=='spacy'",
             "name": "text_language_spacy",
-            "label": "Text language",
+            "label": "Language",
+            "description": "List of supported languages",
             "type": "SELECT",
-            "description": "Select the language of your texts.",
             "selectChoices": [
+                {
+                    "value": "zh",
+                    "label": "Chinese"
+                },
                 {
                     "value": "en",
                     "label": "English"
@@ -58,6 +70,22 @@
                 {
                     "value": "fr",
                     "label": "French"
+                },
+                {
+                    "value": "de",
+                    "label": "German"
+                },
+                {
+                    "value": "nb",
+                    "label": "Norwegian Bokmål"
+                },
+                {
+                    "value": "pl",
+                    "label": "Polish"
+                },
+                {
+                    "value": "es",
+                    "label": "Spanish"
                 }
             ],
             "defaultValue": "en"
@@ -65,9 +93,9 @@
         {
             "visibilityCondition": "model.ner_model=='flair'",
             "name": "text_language_flair",
-            "label": "Text language",
+            "label": "Language",
             "type": "SELECT",
-            "description": "Select the language of your texts.",
+            "description": "Only supported language",
             "selectChoices": [
                 {
                     "value": "en",
@@ -77,22 +105,14 @@
             "defaultValue": "en"
         },
         {
-            "label": "Advanced",
+            "name": "separator_configuration",
+            "label": "Configuration",
             "type": "SEPARATOR"
         },
         {
             "name": "advanced_settings",
-            "label": "Show advanced Settings",
+            "label": "Expert mode",
             "type": "BOOLEAN",
-            "description": "",
-            "defaultValue": false
-        },
-        {
-            "visibilityCondition": "model.advanced_settings",
-            "name": "output_single_json",
-            "label": "Output single column",
-            "type": "BOOLEAN",
-            "description": "Output a single JSON column rather than one column per entity type",
             "defaultValue": false
         },
         {
@@ -100,11 +120,11 @@
             "name": "ner_model",
             "label": "Model",
             "type": "SELECT",
-            "description": "SpaCy (multi-language, faster, less accurate) of Flair (Enlgish only, slower, more accurate).",
+            "description": "spaCy (multi-lingual, faster) or Flair (English only, slower)",
             "selectChoices": [
                 {
                     "value": "spacy",
-                    "label": "SpaCy"
+                    "label": "spaCy"
                 },
                 {
                     "value": "flair",
@@ -112,6 +132,14 @@
                 }
             ],
             "defaultValue": "spacy"
+        },
+        {
+            "visibilityCondition": "model.advanced_settings",
+            "name": "output_single_json",
+            "label": "JSON output",
+            "type": "BOOLEAN",
+            "description": "Output a single JSON column rather than one column per entity type",
+            "defaultValue": false
         }
     ]
 }
