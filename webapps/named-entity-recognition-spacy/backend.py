@@ -1,31 +1,17 @@
+import json
 from flask import request
 import spacy
 from spacy import displacy
 
-LANGUAGE = 'en'
+from ner_utils_spacy import SPACY_LANGUAGE_MODELS
 
-try:
-    nlp = spacy.load(LANGUAGE)
-except IOError:
-    import sys
-    from subprocess import Popen, PIPE
 
-    # sys.executable returns the complete path to the python executable of the current process
-    command = [sys.executable, "-m", "spacy", "download", LANGUAGE]
-
-    p = Popen(command, stdout=PIPE, stderr=PIPE)
-    output, err = p.communicate()
-
-    try:
-        nlp = spacy.load(LANGUAGE)
-    except:
-        raise Exception("Could not download SpaCy's model, probably because you don't have admin rights over the plugin code environment.")
-
-@app.route('/run_NER')
+@app.route("/run_NER")  # noqa
 def run_NER():
-    text = request.args.get('input', '')
-
+    text = request.args.get("input", "")
+    language = request.args.get("language", "en")
+    print("Processing text '{}' in language '{}'...".format(text, language))
+    nlp = spacy.load(SPACY_LANGUAGE_MODELS[language])
     doc = nlp(text)
-
-    html = displacy.render(doc, style='ent', page=False)
+    html = displacy.render(doc, style="ent", page=False)
     return json.dumps(html)

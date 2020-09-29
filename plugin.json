@@ -1,14 +1,17 @@
 {
     "id": "named-entity-recognition",
-    "version": "1.2.0",
+    "version": "1.3.0",
     "meta": {
         "label": "Named Entity Recognition",
         "category": "Natural Language Processing",
-        "description": "Identify “real-world objects” (people names, dates, places, etc.) in a text",
-        "author": "Dataiku (Alex COMBESSIE and Hicham EL BOUKKOURI)",
+        "description": "Recognize Named Entities in text data using pre-trained models",
+        "author": "Dataiku (Alex COMBESSIE, Du PHAN, Hicham EL BOUKKOURI)",
         "icon": "icon-tags",
         "licenseInfo": "Apache Software License",
         "url": "https://www.dataiku.com/product/plugins/named-entity-recognition/",
-        "tags": ["NLP"]
+        "tags": [
+            "NLP"
+        ],
+        "supportLevel": "NOT_SUPPORTED"
     }
 }
