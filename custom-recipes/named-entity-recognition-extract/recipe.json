@@ -76,6 +76,10 @@
                     "label": "German"
                 },
                 {
+                    "value": "ja",
+                    "label": "Japanese"
+                },
+                {
                     "value": "nb",
                     "label": "Norwegian Bokmål"
                 },

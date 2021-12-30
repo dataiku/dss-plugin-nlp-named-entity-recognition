@@ -11,6 +11,7 @@ SPACY_LANGUAGE_MODELS = {
     "pl": "nb_core_news_sm",
     "fr": "fr_core_news_sm",
     "de": "de_core_news_sm",
+    "ja": "ja_core_news_sm",
     "nb": "nb_core_news_sm",
 }
 
