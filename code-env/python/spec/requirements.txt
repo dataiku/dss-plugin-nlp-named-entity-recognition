@@ -3,7 +3,7 @@ flair==0.6.1
 gensim==3.8.0
 flask>=1.0,<1.1
 tqdm==4.50.0
-spacy==2.3.2
+spacy[ja]==2.3.2
 https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.3.1/en_core_web_sm-2.3.1.tar.gz
 https://github.com/explosion/spacy-models/releases/download/es_core_news_sm-2.3.1/es_core_news_sm-2.3.1.tar.gz
 https://github.com/explosion/spacy-models/releases/download/zh_core_web_sm-2.3.1/zh_core_web_sm-2.3.1.tar.gz
@@ -11,3 +11,4 @@ https://github.com/explosion/spacy-models/releases/download/pl_core_news_sm-2.3.
 https://github.com/explosion/spacy-models/releases/download/nb_core_news_sm-2.3.0/nb_core_news_sm-2.3.0.tar.gz
 https://github.com/explosion/spacy-models/releases/download/fr_core_news_sm-2.3.0/fr_core_news_sm-2.3.0.tar.gz
 https://github.com/explosion/spacy-models/releases/download/de_core_news_sm-2.3.0/de_core_news_sm-2.3.0.tar.gz
+https://github.com/explosion/spacy-models/releases/download/ja_core_news_sm-2.3.0/ja_core_news_sm-2.3.0.tar.gz
