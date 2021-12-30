@@ -1,0 +1,17 @@
+{
+    "meta": {
+        "label": "Named Entity Visualization",
+        "description": "Visualize Named Entity results from spaCy",
+        "icon": "icon-tag"
+    },
+    "baseType": "STANDARD",
+    "hasBackend": "true",
+    "standardWebAppLibraries": [
+        "jquery",
+        "dataiku",
+        "font_awesome"
+    ],
+    "virtualWebAppAffinity": "PREFER_VIRTUAL",
+    "roles": [],
+    "params": []
+}

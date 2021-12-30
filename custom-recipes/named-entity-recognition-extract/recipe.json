@@ -1,0 +1,145 @@
+{
+    "meta": {
+        "label": "Named Entity Recognition",
+        "description": "Identify “real-world objects” (i.e. People names, Dates, Places, etc) in a text column",
+        "icon": "icon-tag"
+    },
+    "kind": "PYTHON",
+    "selectableFromDataset": "input_dataset",
+    "inputRoles": [
+        {
+            "name": "input_dataset",
+            "label": "Input dataset",
+            "description": "Dataset containing the text data to analyze",
+            "arity": "UNARY",
+            "required": true,
+            "acceptsDataset": true
+        },
+        {
+            "name": "model_folder",
+            "label": "Flair model (optional)",
+            "description": "Folder containing Flair model weights",
+            "arity": "UNARY",
+            "required": false,
+            "acceptsManagedFolder": true,
+            "acceptsDataset": false,
+            "mustBeStrictlyType": "Filesystem"
+        }
+    ],
+    "outputRoles": [
+        {
+            "name": "output_dataset",
+            "label": "Output dataset",
+            "description": "Dataset with the input text and the corresponding entities",
+            "arity": "UNARY",
+            "required": true,
+            "acceptsDataset": true
+        }
+    ],
+    "params": [
+        {
+            "name": "separator_input",
+            "label": "Input parameters",
+            "type": "SEPARATOR"
+        },
+        {
+            "name": "text_column_name",
+            "label": "Text column",
+            "type": "COLUMN",
+            "mandatory": true,
+            "columnRole": "input_dataset",
+            "allowedColumnTypes": [
+                "string"
+            ]
+        },
+        {
+            "visibilityCondition": "model.ner_model=='spacy'",
+            "name": "text_language_spacy",
+            "label": "Language",
+            "description": "List of supported languages",
+            "type": "SELECT",
+            "selectChoices": [
+                {
+                    "value": "zh",
+                    "label": "Chinese"
+                },
+                {
+                    "value": "en",
+                    "label": "English"
+                },
+                {
+                    "value": "fr",
+                    "label": "French"
+                },
+                {
+                    "value": "de",
+                    "label": "German"
+                },
+                {
+                    "value": "nb",
+                    "label": "Norwegian Bokmål"
+                },
+                {
+                    "value": "pl",
+                    "label": "Polish"
+                },
+                {
+                    "value": "es",
+                    "label": "Spanish"
+                }
+            ],
+            "defaultValue": "en"
+        },
+        {
+            "visibilityCondition": "model.ner_model=='flair'",
+            "name": "text_language_flair",
+            "label": "Language",
+            "type": "SELECT",
+            "description": "Only supported language",
+            "selectChoices": [
+                {
+                    "value": "en",
+                    "label": "English"
+                }
+            ],
+            "defaultValue": "en"
+        },
+        {
+            "name": "separator_configuration",
+            "label": "Configuration",
+            "type": "SEPARATOR"
+        },
+        {
+            "name": "advanced_settings",
+            "label": "Expert mode",
+            "type": "BOOLEAN",
+            "defaultValue": false
+        },
+        {
+            "visibilityCondition": "model.advanced_settings",
+            "name": "ner_model",
+            "label": "Model",
+            "type": "SELECT",
+            "description": "spaCy (multi-lingual, faster) or Flair (English only, slower)",
+            "selectChoices": [
+                {
+                    "value": "spacy",
+                    "label": "spaCy"
+                },
+                {
+                    "value": "flair",
+                    "label": "Flair"
+                }
+            ],
+            "defaultValue": "spacy"
+        },
+        {
+            "visibilityCondition": "model.advanced_settings",
+            "name": "output_single_json",
+            "label": "JSON output",
+            "type": "BOOLEAN",
+            "description": "Output a single JSON column rather than one column per entity type",
+            "defaultValue": false
+        }
+    ]
+}
