@@ -37,16 +37,10 @@ if ner_model == "spacy":
 
     language = recipe_config.get("text_language_spacy", "en")
 else:
-    from ner_utils_flair import extract_entities, CustomSequenceTagger
-
-    try:
-        model_folder = get_input_names_for_role("model_folder")[0]
-    except IndexError:
-        raise Exception(
-            "To use Flair, download the model using the macro and add the resulting folder as input to the recipe."
-        )
-    folder_path = dataiku.Folder(model_folder).get_path()
-    tagger = CustomSequenceTagger.load("ner-ontonotes-fast", folder_path)
+    from flair.models import SequenceTagger
+    from ner_utils_flair import extract_entities
+    
+    tagger = SequenceTagger.load("ner")
 
 #############################
 # Main Loop
