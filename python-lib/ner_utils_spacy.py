@@ -32,7 +32,7 @@ def extract_entities(text_column, format: bool, language: str):
     docs = nlp.pipe(text_column.values)
 
     # Extract entities
-    entity_df = pd.DataFrame()
+    rows = []
     for doc in docs:
         df_row = defaultdict(list)
         for entity in doc.ents:
@@ -45,7 +45,9 @@ def extract_entities(text_column, format: bool, language: str):
                 df_row[k] = json.dumps(v)
             df_row["sentence"] = doc.text
 
-        entity_df = entity_df.append(df_row, ignore_index=True)
+        rows.append(df_row)
+
+    entity_df = pd.DataFrame(rows)
 
     # Put 'sentence' column first
     cols = sorted(list(entity_df.columns))

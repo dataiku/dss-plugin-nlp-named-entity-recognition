@@ -14,16 +14,6 @@
             "arity": "UNARY",
             "required": true,
             "acceptsDataset": true
-        },
-        {
-            "name": "model_folder",
-            "label": "Flair model (optional)",
-            "description": "Folder containing Flair model weights",
-            "arity": "UNARY",
-            "required": false,
-            "acceptsManagedFolder": true,
-            "acceptsDataset": false,
-            "mustBeStrictlyType": "Filesystem"
         }
     ],
     "outputRoles": [
@@ -56,7 +46,7 @@
             "visibilityCondition": "model.ner_model=='spacy'",
             "name": "text_language_spacy",
             "label": "Language",
-            "description": "List of supported languages",
+            "description": "List of supported languages (May need to edit requirements.txt)",
             "type": "SELECT",
             "selectChoices": [
                 {
@@ -99,7 +89,7 @@
             "name": "text_language_flair",
             "label": "Language",
             "type": "SELECT",
-            "description": "Only supported language",
+            "description": "Additional models can be added in the resources_init.py script",
             "selectChoices": [
                 {
                     "value": "en",
@@ -124,7 +114,7 @@
             "name": "ner_model",
             "label": "Model",
             "type": "SELECT",
-            "description": "spaCy (multi-lingual, faster) or Flair (English only, slower)",
+            "description": "spaCy (faster) or Flair (slower)",
             "selectChoices": [
                 {
                     "value": "spacy",

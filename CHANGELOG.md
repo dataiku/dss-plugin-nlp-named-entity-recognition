@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 2.0.0 - Feature release - 2022-06-13
+- Upgrade Flair, spaCy and model downloading functionality
+
 ## Version 1.3.4 - Feature release - 2022-01-04
 - Add Japanese support
 
