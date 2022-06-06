@@ -27,9 +27,6 @@ FLAIR_ENTITIES = [
     "CARDINAL",
 ]
 
-#############################
-# NER function
-#############################
 
 # Regex for matching either
 PATTERN = r"({}|{})".format(
