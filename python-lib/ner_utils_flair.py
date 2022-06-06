@@ -6,6 +6,7 @@ from flair.data import Sentence
 import pandas as pd
 
 
+
 def extract_entities(text_column, format, tagger):
     # Create Sentences
     sentences = [Sentence(text, use_tokenizer=True) for text in text_column.values]
