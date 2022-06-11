@@ -53,5 +53,4 @@ def extract_entities(text_column, format: bool, language: str):
     cols = sorted(list(entity_df.columns))
     cols.insert(0, cols.pop(cols.index("sentence")))
     entity_df = entity_df[cols]
-
     return entity_df
