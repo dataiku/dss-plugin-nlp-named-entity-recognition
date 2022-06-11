@@ -1,5 +1,6 @@
 flair==0.11.3
 flask>=2.0,<2.1
+gensim==3.8.0
 numpy==1.19.5
 spacy[ja]==3.3.0
 tqdm==4.50.0
