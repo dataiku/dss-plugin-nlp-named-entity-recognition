@@ -16,9 +16,7 @@ SPACY_LANGUAGE_MODELS = {
     "nb": "nb_core_news_sm",
 }
 
-
-def extract_entities(text_column, format: bool, language: str):
-    # Tag sentences
+def get_spacy_model(language: str):
     language_model = SPACY_LANGUAGE_MODELS.get(language, None)
     if language_model is None:
         raise ValueError(f"The language {language} is not available. \
@@ -29,6 +27,11 @@ def extract_entities(text_column, format: bool, language: str):
         # Raising ValueError instead of OSError so it shows up at the top of the log
         raise ValueError(f"Could not find spaCy model for the language {language}. \
                         Maybe you need to edit the requirements.txt file to enable it.")
+    return nlp
+
+def extract_entities(text_column, format: bool, language: str):
+    # Tag sentences
+    nlp = get_spacy_model(language=language)
     docs = nlp.pipe(text_column.values)
 
     # Extract entities
