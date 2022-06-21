@@ -32,8 +32,7 @@ def get_spacy_model(language: str):
 def extract_entities(text_column, format: bool, language: str):
     # Tag sentences
     nlp = get_spacy_model(language=language)
-    docs = nlp.pipe(text_column.values)
-
+    docs = nlp.pipe(text_column.values, n_process=-1, disable=["tok2vec", "tagger", "parser", "attribute_ruler", "lemmatizer"], batch_size=100)
     # Extract entities
     rows = []
     for doc in docs:
