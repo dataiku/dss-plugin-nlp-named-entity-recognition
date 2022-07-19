@@ -12,3 +12,4 @@ https://github.com/explosion/spacy-models/releases/download/nb_core_news_sm-2.3.
 https://github.com/explosion/spacy-models/releases/download/fr_core_news_sm-2.3.0/fr_core_news_sm-2.3.0.tar.gz
 https://github.com/explosion/spacy-models/releases/download/de_core_news_sm-2.3.0/de_core_news_sm-2.3.0.tar.gz
 https://github.com/explosion/spacy-models/releases/download/ja_core_news_sm-2.3.0/ja_core_news_sm-2.3.0.tar.gz
+sudachipy==0.6.0; python_version == '3.6'
