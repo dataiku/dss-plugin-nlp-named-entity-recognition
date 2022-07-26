@@ -22,7 +22,7 @@ def get_spacy_model(language: str):
         raise ValueError(f"The language {language} is not available. \
                         You can add the language & corresponding model name by editing the code.")
     try:
-        nlp = spacy.load(language_model)
+        nlp = spacy.load(language_model, exclude=["tok2vec", "tagger", "parser", "attribute_ruler", "lemmatizer"])
     except OSError:
         # Raising ValueError instead of OSError so it shows up at the top of the log
         raise ValueError(f"Could not find spaCy model for the language {language}. \
@@ -32,7 +32,7 @@ def get_spacy_model(language: str):
 def extract_entities(text_column, format: bool, language: str):
     # Tag sentences
     nlp = get_spacy_model(language=language)
-    docs = nlp.pipe(text_column.values, n_process=-1, disable=["tok2vec", "tagger", "parser", "attribute_ruler", "lemmatizer"], batch_size=100)
+    docs = nlp.pipe(text_column.values, n_process=-1, batch_size=100)
     # Extract entities
     rows = []
     for doc in docs:
