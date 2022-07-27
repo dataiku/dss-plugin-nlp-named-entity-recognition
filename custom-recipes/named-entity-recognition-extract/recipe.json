@@ -46,7 +46,7 @@
             "visibilityCondition": "model.ner_model=='spacy'",
             "name": "text_language_spacy",
             "label": "Language",
-            "description": "List of supported languages (May need to edit requirements.txt)",
+            "description": "List of supported languages",
             "type": "SELECT",
             "selectChoices": [
                 {
@@ -89,7 +89,7 @@
             "name": "text_language_flair",
             "label": "Language",
             "type": "SELECT",
-            "description": "Additional models can be added in the resources_init.py script",
+            "description": "Only supported languages",
             "selectChoices": [
                 {
                     "value": "en",
