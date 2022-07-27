@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import multiprocessing
+
 import dataiku
 from dataiku.customrecipe import get_input_names_for_role, get_output_names_for_role, get_recipe_config
 
@@ -57,7 +59,11 @@ def compute_entities_df(df):
     out_df = df.merge(out_df, left_index=True, right_index=True)
     return out_df
 
+if ner_model == "spacy":
+    chunksize = 200 * multiprocessing.cpu_count()
+else:
+    chunksize = 100
 
 process_dataset_chunks(
-    input_dataset=input_dataset, output_dataset=output_dataset, func=compute_entities_df, chunksize=100
+    input_dataset=input_dataset, output_dataset=output_dataset, func=compute_entities_df, chunksize=chunksize
 )
