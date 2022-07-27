@@ -14,16 +14,6 @@
             "arity": "UNARY",
             "required": true,
             "acceptsDataset": true
-        },
-        {
-            "name": "model_folder",
-            "label": "Flair model (optional)",
-            "description": "Folder containing Flair model weights",
-            "arity": "UNARY",
-            "required": false,
-            "acceptsManagedFolder": true,
-            "acceptsDataset": false,
-            "mustBeStrictlyType": "Filesystem"
         }
     ],
     "outputRoles": [
@@ -124,7 +114,7 @@
             "name": "ner_model",
             "label": "Model",
             "type": "SELECT",
-            "description": "spaCy (multi-lingual, faster) or Flair (English only, slower)",
+            "description": "spaCy (faster) or Flair (slower)",
             "selectChoices": [
                 {
                     "value": "spacy",

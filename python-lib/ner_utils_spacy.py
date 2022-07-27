@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-import json
 from collections import defaultdict
+import json
+
 import pandas as pd
 import spacy
 
@@ -15,14 +16,25 @@ SPACY_LANGUAGE_MODELS = {
     "nb": "nb_core_news_sm",
 }
 
+def get_spacy_model(language: str):
+    language_model = SPACY_LANGUAGE_MODELS.get(language, None)
+    if language_model is None:
+        raise ValueError(f"The language {language} is not available. \
+                        You can add the language & corresponding model name by editing the code.")
+    try:
+        nlp = spacy.load(language_model, exclude=["tok2vec", "tagger", "parser", "attribute_ruler", "lemmatizer"])
+    except OSError:
+        # Raising ValueError instead of OSError so it shows up at the top of the log
+        raise ValueError(f"Could not find spaCy model for the language {language}. \
+                        Maybe you need to edit the requirements.txt file to enable it.")
+    return nlp
 
 def extract_entities(text_column, format: bool, language: str):
     # Tag sentences
-    nlp = spacy.load(SPACY_LANGUAGE_MODELS[language])
-    docs = nlp.pipe(text_column.values)
-
+    nlp = get_spacy_model(language=language)
+    docs = nlp.pipe(text_column.values, n_process=-1, batch_size=100)
     # Extract entities
-    entity_df = pd.DataFrame()
+    rows = []
     for doc in docs:
         df_row = defaultdict(list)
         for entity in doc.ents:
@@ -35,11 +47,12 @@ def extract_entities(text_column, format: bool, language: str):
                 df_row[k] = json.dumps(v)
             df_row["sentence"] = doc.text
 
-        entity_df = entity_df.append(df_row, ignore_index=True)
+        rows.append(df_row)
+
+    entity_df = pd.DataFrame(rows)
 
     # Put 'sentence' column first
     cols = sorted(list(entity_df.columns))
     cols.insert(0, cols.pop(cols.index("sentence")))
     entity_df = entity_df[cols]
-
     return entity_df
