@@ -89,7 +89,7 @@
             "name": "text_language_flair",
             "label": "Language",
             "type": "SELECT",
-            "description": "Only supported languages",
+            "description": "Only supported language",
             "selectChoices": [
                 {
                     "value": "en",
