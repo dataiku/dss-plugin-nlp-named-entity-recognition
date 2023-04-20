@@ -7,10 +7,10 @@ tokenizers==0.10.3; python_version == '3.6'
 sudachipy==0.6.0; python_version == '3.6'
 tqdm==4.50.0
 https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.3.0/en_core_web_sm-3.3.0.tar.gz
-# https://github.com/explosion/spacy-models/releases/download/es_core_news_sm-3.3.0/es_core_news_sm-3.3.0.tar.gz
-# https://github.com/explosion/spacy-models/releases/download/zh_core_web_sm-3.3.0/zh_core_web_sm-3.3.0.tar.gz
-# https://github.com/explosion/spacy-models/releases/download/pl_core_news_sm-3.3.0/pl_core_news_sm-3.3.0.tar.gz
-# https://github.com/explosion/spacy-models/releases/download/nb_core_news_sm-3.3.0/nb_core_news_sm-3.3.0.tar.gz
-# https://github.com/explosion/spacy-models/releases/download/fr_core_news_sm-3.3.0/fr_core_news_sm-3.3.0.tar.gz
-# https://github.com/explosion/spacy-models/releases/download/de_core_news_sm-3.3.0/de_core_news_sm-3.3.0.tar.gz
-# https://github.com/explosion/spacy-models/releases/download/ja_core_news_sm-3.3.0/ja_core_news_sm-3.3.0.tar.gz
+https://github.com/explosion/spacy-models/releases/download/es_core_news_sm-3.3.0/es_core_news_sm-3.3.0.tar.gz
+https://github.com/explosion/spacy-models/releases/download/zh_core_web_sm-3.3.0/zh_core_web_sm-3.3.0.tar.gz
+https://github.com/explosion/spacy-models/releases/download/pl_core_news_sm-3.3.0/pl_core_news_sm-3.3.0.tar.gz
+https://github.com/explosion/spacy-models/releases/download/nb_core_news_sm-3.3.0/nb_core_news_sm-3.3.0.tar.gz
+https://github.com/explosion/spacy-models/releases/download/fr_core_news_sm-3.3.0/fr_core_news_sm-3.3.0.tar.gz
+https://github.com/explosion/spacy-models/releases/download/de_core_news_sm-3.3.0/de_core_news_sm-3.3.0.tar.gz
+https://github.com/explosion/spacy-models/releases/download/ja_core_news_sm-3.3.0/ja_core_news_sm-3.3.0.tar.gz
