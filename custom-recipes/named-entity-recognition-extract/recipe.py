@@ -59,11 +59,12 @@ def compute_entities_df(df):
     out_df = df.merge(out_df, left_index=True, right_index=True)
     return out_df
 
-if ner_model == "spacy":
-    chunksize = 200 * multiprocessing.cpu_count()
-else:
-    chunksize = 100
+if __name__ == '__main__':
+    if ner_model == "spacy":
+        chunksize = 200 * multiprocessing.cpu_count()
+    else:
+        chunksize = 100
 
-process_dataset_chunks(
-    input_dataset=input_dataset, output_dataset=output_dataset, func=compute_entities_df, chunksize=chunksize
-)
+    process_dataset_chunks(
+        input_dataset=input_dataset, output_dataset=output_dataset, func=compute_entities_df, chunksize=chunksize
+    )
