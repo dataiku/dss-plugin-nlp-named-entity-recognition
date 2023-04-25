@@ -1,8 +1,11 @@
 {
     "acceptedPythonInterpreters": [
         "PYTHON36",
-        "PYTHON37"
+        "PYTHON37",
+        "PYTHON38",
+        "PYTHON39"
     ],
+    "corePackagesSet": "AUTO",
     "forceConda": false,
     "installCorePackages": true,
     "installJupyterSupport": false
