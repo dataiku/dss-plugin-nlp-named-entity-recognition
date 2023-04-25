@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 2.0.1 - Patch release - 2023-04-25
+- Fix bug that disabled alternative languages
+- Support python 3.8 and python 3.9
+
 ## Version 2.0.0 - Feature release - 2022-06-13
 - Upgrade Flair, spaCy and model downloading functionality
 

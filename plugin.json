@@ -1,6 +1,6 @@
 {
     "id": "named-entity-recognition",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "meta": {
         "label": "Named Entity Recognition",
         "category": "Natural Language Processing",
