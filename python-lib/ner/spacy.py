@@ -11,7 +11,7 @@ from .constants import (
 )
 
 
-SPACY_LANGUAGE_MODELS = {
+SPACY_LANGUAGE_MODELS_LEGACY_MAPPING = {
     "en": "en_core_web_sm",
     "es": "es_core_news_sm",
     "zh": "zh_core_web_sm",
@@ -22,22 +22,12 @@ SPACY_LANGUAGE_MODELS = {
     "nb": "nb_core_news_sm",
 }
 
-def get_spacy_model(language: str):
-    language_model = SPACY_LANGUAGE_MODELS.get(language, None)
-    if language_model is None:
-        raise ValueError(f"The language {language} is not available. \
-                        You can add the language & corresponding model name by editing the code.")
-    try:
-        nlp = spacy.load(language_model, exclude=["tok2vec", "tagger", "parser", "attribute_ruler", "lemmatizer"])
-    except OSError:
-        # Raising ValueError instead of OSError so it shows up at the top of the log
-        raise ValueError(f"Could not find spaCy model for the language {language}. \
-                        Maybe you need to edit the requirements.txt file to enable it.")
-    return nlp
-
-def extract_entities(text_column, format, language: str):
+def get_model(model_id: str):
+    return spacy.load(SPACY_LANGUAGE_MODELS_LEGACY_MAPPING.get(model_id, None), exclude=["tok2vec", "tagger", "parser", "attribute_ruler", "lemmatizer"])
+    
+def extract_entities(text_column, format, model_id: str):
     # Tag sentences
-    nlp = get_spacy_model(language=language)
+    nlp = get_model(model_id=model_id)
     docs = nlp.pipe(text_column.values, n_process=-1, batch_size=100)
     # Extract entities
     extract = {

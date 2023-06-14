@@ -48,14 +48,12 @@ if advanced_settings:
 
 if ner_model == "spacy":
     from ner.spacy import extract_entities
-
-    language = recipe_config.get("text_language_spacy", "en")
+    model_id = recipe_config.get("text_language_spacy", "en")
 else:
     import flair
-    from flair.models import SequenceTagger
-    from ner.flair import extract_entities    
+    from ner.flair import extract_entities
+    model_id = recipe_config.get("text_language_flair", "en")
     flair.device = recipe_config.get("flair_device", "cpu")
-    tagger = SequenceTagger.load("flair/ner-english-fast@3d3d35790f78a00ef319939b9004209d1d05f788")
 
 #############################
 # Main Loop
@@ -63,10 +61,7 @@ else:
 
 
 def compute_entities_df(df):
-    if ner_model == "spacy":
-        out_df = extract_entities(df[text_column_name].fillna(" "), format=output_format, language=language)
-    else:
-        out_df = extract_entities(df[text_column_name].fillna(" "), format=output_format, tagger=tagger)
+    out_df = extract_entities(df[text_column_name].fillna(" "), format=output_format, model_id=model_id)
     df = df.reset_index(drop=True)
     out_df = out_df.reset_index(drop=True)
     out_df = df.merge(out_df, left_index=True, right_index=True)

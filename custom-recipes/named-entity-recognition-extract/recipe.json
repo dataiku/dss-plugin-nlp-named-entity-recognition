@@ -4,6 +4,7 @@
         "description": "Identify “real-world objects” (i.e. People names, Dates, Places, etc) in a text column",
         "icon": "icon-tag"
     },
+    "paramsPythonSetup": "compute_dynamic_select.py",
     "kind": "PYTHON",
     "selectableFromDataset": "input_dataset",
     "inputRoles": [
@@ -89,13 +90,8 @@
             "name": "text_language_flair",
             "label": "Language",
             "type": "SELECT",
-            "description": "Only supported language",
-            "selectChoices": [
-                {
-                    "value": "en",
-                    "label": "English"
-                }
-            ],
+            "description": "List of different models",
+            "getChoicesFromPython": true,
             "defaultValue": "en"
         },
         {
