@@ -4,8 +4,17 @@ import json
 import pandas as pd
 import spacy
 
+# backward compatibility
+model_provider = None
 
-SPACY_LANGUAGE_MODELS = {
+try:
+    from dataiku.core.model_provider import get_model_provider
+    model_provider = get_model_provider()
+except ImportError:
+    pass
+
+
+SPACY_LANGUAGE_MODELS_LEGACY_MAPPING = {
     "en": "en_core_web_sm",
     "es": "es_core_news_sm",
     "zh": "zh_core_web_sm",
@@ -16,23 +25,24 @@ SPACY_LANGUAGE_MODELS = {
     "nb": "nb_core_news_sm",
 }
 
-def get_spacy_model(language: str):
-    language_model = SPACY_LANGUAGE_MODELS.get(language, None)
-    if language_model is None:
-        raise ValueError(f"The language {language} is not available. \
-                        You can add the language & corresponding model name by editing the code.")
-    try:
-        nlp = spacy.load(language_model, exclude=["tok2vec", "tagger", "parser", "attribute_ruler", "lemmatizer"])
-    except OSError:
-        # Raising ValueError instead of OSError so it shows up at the top of the log
-        raise ValueError(f"Could not find spaCy model for the language {language}. \
-                        Maybe you need to edit the requirements.txt file to enable it.")
-    return nlp
+SPACY_MODEL_PROVIDER_MAPPING = {
+    "en_core_web_trf": "spacy/en_core_web_trf@de00f6d68ceec2864448ffa2e00bda7f05605d2e",
+}
 
-def extract_entities(text_column, format, language: str):
+def get_model(model_id: str):
+    language_model = SPACY_LANGUAGE_MODELS_LEGACY_MAPPING.get(model_id, None)
+    if language_model is not None:
+        # those models are downloaded on resources init
+        model_path = language_model
+    elif model_provider is not None:
+        # dl model with provider at hugging face proper location, return pytorch bin path
+        model_path = model_provider.get_or_download_model(SPACY_MODEL_PROVIDER_MAPPING[model_id])
+    return spacy.load(model_path, exclude=["tok2vec", "tagger", "parser", "attribute_ruler", "lemmatizer"])
+    
+def extract_entities(text_column, format, model_id, n_process=-1):
     # Tag sentences
-    nlp = get_spacy_model(language=language)
-    docs = nlp.pipe(text_column.values, n_process=-1, batch_size=100)
+    nlp = get_model(model_id=model_id)
+    docs = nlp.pipe(text_column.values, n_process=n_process, batch_size=100)
     # Extract entities
     rows = {
         "standard": get_standard_rows,

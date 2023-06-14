@@ -2,11 +2,21 @@
 import json
 
 from flair.data import Sentence
+from flair.models import SequenceTagger
 import pandas as pd
 
 
-def extract_entities(text_column, format, tagger):
+FLAIR_LANGUAGE_MODELS_LEGACY_MAPPING = {
+    "en": "flair/ner-english-fast@3d3d35790f78a00ef319939b9004209d1d05f788",
+}
+
+
+def get_model(model_id: str):
+    return SequenceTagger.load(FLAIR_LANGUAGE_MODELS_LEGACY_MAPPING.get(model_id, None))
+
+def extract_entities(text_column, format, model_id):
     # Create Sentences
+    tagger = get_model(model_id)
     sentences = [Sentence(text, use_tokenizer=True) for text in text_column.values]
 
     # Tag Sentences
