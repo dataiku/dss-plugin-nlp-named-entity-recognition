@@ -43,7 +43,7 @@ else:
     from flair.models import SequenceTagger
     from ner_utils_flair import extract_entities
     
-    tagger = SequenceTagger.load("flair/ner-english-fast")
+    tagger = SequenceTagger.load("flair/ner-english-fast@3d3d35790f78a00ef319939b9004209d1d05f788")
 
 #############################
 # Main Loop

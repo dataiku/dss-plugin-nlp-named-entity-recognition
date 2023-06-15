@@ -7,7 +7,7 @@ from ner_utils_flair import extract_entities
 TEST_SENTENCE = "Mark Zuckerberg is one of the founders of Facebook, a company from the United States"
 
 def test_extract_entities():
-    tagger = SequenceTagger.load("flair/ner-english-fast")
+    tagger = SequenceTagger.load("flair/ner-english-fast@3d3d35790f78a00ef319939b9004209d1d05f788")
     df = pd.DataFrame({'text': [TEST_SENTENCE]})
     pd.testing.assert_frame_equal(
         extract_entities(df['text'], 'labeling', tagger),
