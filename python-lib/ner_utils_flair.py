@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from collections import defaultdict
 import json
 
 from flair.data import Sentence
@@ -14,21 +13,10 @@ def extract_entities(text_column, format, tagger):
     tagger.predict(sentences)
 
     # Extract entities
-    rows = []
-    for sentence in sentences:
-        df_row = defaultdict(list)
-        for entity in sentence.get_spans('ner'):
-            tag = entity.get_label("ner").value
-            text = entity.text
-            df_row[tag].append(text)
-        if format:
-            df_row = {"sentence": sentence.to_plain_string(), "entities": json.dumps(df_row)}
-        else:
-            for k, v in df_row.items():
-                df_row[k] = json.dumps(v)
-            df_row["sentence"] = sentence.to_plain_string()
-
-        rows.append(df_row)
+    rows = {
+        "standard": get_standard_rows,
+        "labeling": get_labeling_rows
+    }.get(format, get_default_rows)(sentences)
 
     entity_df = pd.DataFrame(rows)
 
@@ -37,3 +25,44 @@ def extract_entities(text_column, format, tagger):
     cols.insert(0, cols.pop(cols.index("sentence")))
     entity_df = entity_df[cols]
     return entity_df
+
+def get_standard_rows(sentences):
+    rows = []
+    for sentence in sentences:
+        entities = {}
+        for span in sentence.get_spans('ner'):
+            label = span.get_label("ner").value
+            if label not in entities:
+                entities[label] = []
+            entities[label].append(span.text)
+        rows.append({"sentence": sentence.to_plain_string(), "entities": json.dumps(entities)})
+    return rows
+
+def get_default_rows(sentences):
+    rows = []
+    for sentence in sentences:
+        labels = {}
+        for span in sentence.get_spans('ner'):
+            label = span.get_label("ner").value
+            if label not in labels:
+                labels[label] = []
+            labels[label].append(span.text)
+        row = {"sentence": sentence.to_plain_string()}
+        for k, v in labels.items():
+            row[k] = json.dumps(v)
+        rows.append(row)
+    return rows
+
+def get_labeling_rows(sentences):
+    rows = []
+    for sentence in sentences:
+        entities = []
+        for span in sentence.get_spans('ner'):
+            entities.append({
+                "text": span.text,
+                "beginningIndex": span.start_position,
+                "endIndex": span.end_position,
+                "category": span.get_label("ner").value
+            })
+        rows.append({"sentence": sentence.to_plain_string(), "entities": json.dumps(entities)})
+    return rows

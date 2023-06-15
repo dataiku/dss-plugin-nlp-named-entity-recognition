@@ -134,6 +134,24 @@
             "type": "BOOLEAN",
             "description": "Output a single JSON column rather than one column per entity type",
             "defaultValue": false
+        },
+        {
+            "visibilityCondition": "model.output_single_json",
+            "name": "output_json_format",
+            "label": "JSON format",
+            "type": "SELECT",
+            "description": "Format used for the json output column",
+            "selectChoices": [
+                {
+                    "value": "standard",
+                    "label": "Standard"
+                },
+                {
+                    "value": "labeling",
+                    "label": "Labeling"
+                }
+            ],
+            "defaultValue": "standard"
         }
     ]
 }

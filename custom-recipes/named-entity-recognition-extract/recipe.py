@@ -27,6 +27,7 @@ if not text_column_name:
     raise ValueError("Please choose a text column")
 
 advanced_settings = recipe_config.get("advanced_settings", False)
+output_json_format = recipe_config.get("output_json_format", "standard")
 if advanced_settings:
     output_single_json = recipe_config.get("output_single_json", False)
     ner_model = recipe_config.get("ner_model", "spacy")
@@ -51,9 +52,9 @@ else:
 
 def compute_entities_df(df):
     if ner_model == "spacy":
-        out_df = extract_entities(df[text_column_name].fillna(" "), format=output_single_json, language=language)
+        out_df = extract_entities(df[text_column_name].fillna(" "), format=output_json_format if output_single_json else None, language=language)
     else:
-        out_df = extract_entities(df[text_column_name].fillna(" "), format=output_single_json, tagger=tagger)
+        out_df = extract_entities(df[text_column_name].fillna(" "), format=output_json_format if output_single_json else None, tagger=tagger)
     df = df.reset_index(drop=True)
     out_df = out_df.reset_index(drop=True)
     out_df = df.merge(out_df, left_index=True, right_index=True)

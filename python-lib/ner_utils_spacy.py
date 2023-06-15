@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from collections import defaultdict
 import json
 
 import pandas as pd
 import spacy
+
 
 SPACY_LANGUAGE_MODELS = {
     "en": "en_core_web_sm",
@@ -29,25 +29,15 @@ def get_spacy_model(language: str):
                         Maybe you need to edit the requirements.txt file to enable it.")
     return nlp
 
-def extract_entities(text_column, format: bool, language: str):
+def extract_entities(text_column, format, language: str):
     # Tag sentences
     nlp = get_spacy_model(language=language)
     docs = nlp.pipe(text_column.values, n_process=-1, batch_size=100)
     # Extract entities
-    rows = []
-    for doc in docs:
-        df_row = defaultdict(list)
-        for entity in doc.ents:
-            df_row[entity.label_].append(entity.text)
-
-        if format:
-            df_row = {"sentence": doc.text, "entities": json.dumps(df_row)}
-        else:
-            for k, v in df_row.items():
-                df_row[k] = json.dumps(v)
-            df_row["sentence"] = doc.text
-
-        rows.append(df_row)
+    rows = {
+        "standard": get_standard_rows,
+        "labeling": get_labeling_rows
+    }.get(format, get_default_rows)(docs)
 
     entity_df = pd.DataFrame(rows)
 
@@ -56,3 +46,42 @@ def extract_entities(text_column, format: bool, language: str):
     cols.insert(0, cols.pop(cols.index("sentence")))
     entity_df = entity_df[cols]
     return entity_df
+
+def get_standard_rows(docs):
+    rows = []
+    for doc in docs:
+        entities = {}
+        for span in doc.ents:
+            if span.label_ not in entities:
+                entities[span.label_] = []
+            entities[span.label_].append(span.text)
+        rows.append({"sentence": doc.text, "entities": json.dumps(entities)})
+    return rows
+
+def get_default_rows(docs):
+    rows = []
+    for doc in docs:
+        labels = {}
+        for span in doc.ents:
+            if span.label_ not in labels:
+                labels[span.label_] = []
+            labels[span.label_].append(span.text)
+        row = {"sentence": doc.text}
+        for k, v in labels.items():
+            row[k] = json.dumps(v)
+        rows.append(row)
+    return rows
+
+def get_labeling_rows(docs):
+    rows = []
+    for doc in docs:
+        entities = []
+        for span in doc.ents:
+            entities.append({
+                "text": span.text,
+                "beginningIndex": span.start_char,
+                "endIndex": span.end_char,
+                "category": span.label_
+            })
+        rows.append({"sentence": doc.text, "entities": json.dumps(entities)})
+    return rows
