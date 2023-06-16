@@ -152,6 +152,25 @@
                 }
             ],
             "defaultValue": "standard"
+        },
+        {
+            "visibilityCondition": "model.ner_model=='flair' && model.advanced_settings",
+            "name": "flair_device",
+            "label": "Processing",
+            "type": "SELECT",
+            "description": "CPU/GPU",
+            "selectChoices": [
+                {
+                    "value": "cpu",
+                    "label": "CPU"
+                },
+                {
+                    "value": "cuda",
+                    "label": "CUDA"
+                }
+
+            ],
+            "defaultValue": "cpu"
         }
     ]
 }

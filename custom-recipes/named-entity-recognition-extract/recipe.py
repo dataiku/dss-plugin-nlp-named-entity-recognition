@@ -40,9 +40,10 @@ if ner_model == "spacy":
 
     language = recipe_config.get("text_language_spacy", "en")
 else:
+    import flair
     from flair.models import SequenceTagger
     from ner_utils_flair import extract_entities
-    
+    flair.device = recipe_config.get("flair_device", "cpu")
     tagger = SequenceTagger.load("flair/ner-english-fast@3d3d35790f78a00ef319939b9004209d1d05f788")
 
 #############################
