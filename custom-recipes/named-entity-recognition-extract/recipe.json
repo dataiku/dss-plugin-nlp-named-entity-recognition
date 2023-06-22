@@ -49,6 +49,7 @@
             "label": "Language",
             "description": "List of supported languages",
             "type": "SELECT",
+            "wt1Loggable": true,
             "selectChoices": [
                 {
                     "value": "zh",
@@ -90,6 +91,7 @@
             "name": "text_language_flair",
             "label": "Language",
             "type": "SELECT",
+            "wt1Loggable": true,
             "description": "List of different models",
             "getChoicesFromPython": true,
             "defaultValue": "en"
@@ -110,6 +112,7 @@
             "name": "ner_model",
             "label": "Model",
             "type": "SELECT",
+            "wt1Loggable": true,
             "description": "spaCy (faster) or Flair (slower)",
             "selectChoices": [
                 {
@@ -128,6 +131,7 @@
             "name": "output_single_json",
             "label": "JSON output",
             "type": "BOOLEAN",
+            "wt1Loggable": true,
             "description": "Output a single JSON column rather than one column per entity type",
             "defaultValue": false
         },
@@ -136,6 +140,7 @@
             "name": "output_json_format",
             "label": "JSON format",
             "type": "SELECT",
+            "wt1Loggable": true,
             "description": "Format used for the json output column",
             "selectChoices": [
                 {
@@ -154,6 +159,7 @@
             "name": "flair_device",
             "label": "Processing",
             "type": "SELECT",
+            "wt1Loggable": true,
             "description": "CPU/GPU",
             "selectChoices": [
                 {
