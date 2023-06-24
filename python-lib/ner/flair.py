@@ -4,6 +4,12 @@ import json
 from flair.data import Sentence
 import pandas as pd
 
+from .constants import (
+    COLUMN_PER_ENTITY_FORMAT,
+    JSON_KEY_PER_ENTITY_FORMAT,
+    JSON_LABELLING_FORMAT
+)
+
 
 def extract_entities(text_column, format, tagger):
     # Create Sentences
@@ -13,10 +19,12 @@ def extract_entities(text_column, format, tagger):
     tagger.predict(sentences)
 
     # Extract entities
-    rows = {
-        "standard": get_standard_rows,
-        "labeling": get_labeling_rows
-    }.get(format, get_default_rows)(sentences)
+    extraction_method = {
+        COLUMN_PER_ENTITY_FORMAT: get_columns_per_entity_rows,
+        JSON_KEY_PER_ENTITY_FORMAT: get_json_key_per_entity_rows,
+        JSON_LABELLING_FORMAT: get_json_labeling_rows
+    }[format]
+    rows = extraction_method(sentences)
 
     entity_df = pd.DataFrame(rows)
 
@@ -26,7 +34,7 @@ def extract_entities(text_column, format, tagger):
     entity_df = entity_df[cols]
     return entity_df
 
-def get_standard_rows(sentences):
+def get_json_key_per_entity_rows(sentences):
     rows = []
     for sentence in sentences:
         entities = {}
@@ -38,7 +46,7 @@ def get_standard_rows(sentences):
         rows.append({"sentence": sentence.to_plain_string(), "entities": json.dumps(entities)})
     return rows
 
-def get_default_rows(sentences):
+def get_columns_per_entity_rows(sentences):
     rows = []
     for sentence in sentences:
         labels = {}
@@ -53,7 +61,7 @@ def get_default_rows(sentences):
         rows.append(row)
     return rows
 
-def get_labeling_rows(sentences):
+def get_json_labeling_rows(sentences):
     rows = []
     for sentence in sentences:
         entities = []

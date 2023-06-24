@@ -2,7 +2,13 @@ import json
 
 import pandas as pd
 from flair.models import SequenceTagger
-from ner_utils_flair import extract_entities
+
+from ner.constants import (
+    COLUMN_PER_ENTITY_FORMAT,
+    JSON_KEY_PER_ENTITY_FORMAT,
+    JSON_LABELLING_FORMAT
+)
+from ner.flair import extract_entities
 
 TEST_SENTENCE = "Mark Zuckerberg is one of the founders of Facebook, a company from the United States"
 
@@ -10,7 +16,7 @@ def test_extract_entities():
     tagger = SequenceTagger.load("flair/ner-english-fast@3d3d35790f78a00ef319939b9004209d1d05f788")
     df = pd.DataFrame({'text': [TEST_SENTENCE]})
     pd.testing.assert_frame_equal(
-        extract_entities(df['text'], 'labeling', tagger),
+        extract_entities(df['text'], JSON_LABELLING_FORMAT, tagger),
         pd.DataFrame({
             'sentence': [TEST_SENTENCE],
             'entities': json.dumps([
@@ -21,7 +27,7 @@ def test_extract_entities():
         })
     )
     pd.testing.assert_frame_equal(
-        extract_entities(df['text'], None, tagger),
+        extract_entities(df['text'], COLUMN_PER_ENTITY_FORMAT, tagger),
         pd.DataFrame({
             'sentence': [TEST_SENTENCE],
             'LOC': json.dumps(['United States']),
@@ -30,7 +36,7 @@ def test_extract_entities():
         })
     )
     pd.testing.assert_frame_equal(
-        extract_entities(df['text'], 'standard', tagger),
+        extract_entities(df['text'], JSON_KEY_PER_ENTITY_FORMAT, tagger),
         pd.DataFrame({
             'sentence': [TEST_SENTENCE],
             'entities': json.dumps({

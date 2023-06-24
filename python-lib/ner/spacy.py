@@ -4,6 +4,12 @@ import json
 import pandas as pd
 import spacy
 
+from .constants import (
+    COLUMN_PER_ENTITY_FORMAT,
+    JSON_KEY_PER_ENTITY_FORMAT,
+    JSON_LABELLING_FORMAT
+)
+
 
 SPACY_LANGUAGE_MODELS = {
     "en": "en_core_web_sm",
@@ -34,10 +40,12 @@ def extract_entities(text_column, format, language: str):
     nlp = get_spacy_model(language=language)
     docs = nlp.pipe(text_column.values, n_process=-1, batch_size=100)
     # Extract entities
-    rows = {
-        "standard": get_standard_rows,
-        "labeling": get_labeling_rows
-    }.get(format, get_default_rows)(docs)
+    extraction_method = {
+        COLUMN_PER_ENTITY_FORMAT: get_columns_per_entity_rows,
+        JSON_KEY_PER_ENTITY_FORMAT: get_json_key_per_entity_rows,
+        JSON_LABELLING_FORMAT: get_json_labeling_rows
+    }[format]
+    rows = extraction_method(docs)
 
     entity_df = pd.DataFrame(rows)
 
@@ -47,7 +55,7 @@ def extract_entities(text_column, format, language: str):
     entity_df = entity_df[cols]
     return entity_df
 
-def get_standard_rows(docs):
+def get_json_key_per_entity_rows(docs):
     rows = []
     for doc in docs:
         entities = {}
@@ -58,7 +66,7 @@ def get_standard_rows(docs):
         rows.append({"sentence": doc.text, "entities": json.dumps(entities)})
     return rows
 
-def get_default_rows(docs):
+def get_columns_per_entity_rows(docs):
     rows = []
     for doc in docs:
         labels = {}
@@ -72,7 +80,7 @@ def get_default_rows(docs):
         rows.append(row)
     return rows
 
-def get_labeling_rows(docs):
+def get_json_labeling_rows(docs):
     rows = []
     for doc in docs:
         entities = []

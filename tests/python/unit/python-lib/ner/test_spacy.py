@@ -1,13 +1,20 @@
 import json
 import pandas as pd
-from ner_utils_spacy import extract_entities
+
+from ner.constants import (
+    COLUMN_PER_ENTITY_FORMAT,
+    JSON_KEY_PER_ENTITY_FORMAT,
+    JSON_LABELLING_FORMAT
+)
+from ner.spacy import extract_entities
+
 
 TEST_SENTENCE = "Mark Zuckerberg is one of the founders of Facebook, a company from the United States"
 
 def test_extract_entities():
     df = pd.DataFrame({'text': [TEST_SENTENCE]})
     pd.testing.assert_frame_equal(
-        extract_entities(df['text'], 'labeling', "en"),
+        extract_entities(df['text'], JSON_LABELLING_FORMAT, "en"),
         pd.DataFrame({
             'sentence': [TEST_SENTENCE],
             'entities': json.dumps([
@@ -18,7 +25,7 @@ def test_extract_entities():
         })
     )
     pd.testing.assert_frame_equal(
-        extract_entities(df['text'], None, "en"),
+        extract_entities(df['text'], COLUMN_PER_ENTITY_FORMAT, "en"),
         pd.DataFrame({
             'sentence': [TEST_SENTENCE],
             'CARDINAL': json.dumps(['one']),
@@ -27,7 +34,7 @@ def test_extract_entities():
         })
     )
     pd.testing.assert_frame_equal(
-        extract_entities(df['text'], 'standard', "en"),
+        extract_entities(df['text'], JSON_KEY_PER_ENTITY_FORMAT, "en"),
         pd.DataFrame({
             'sentence': [TEST_SENTENCE],
             'entities': json.dumps({
