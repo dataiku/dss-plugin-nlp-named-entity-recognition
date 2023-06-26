@@ -19,12 +19,12 @@ def extract_entities(text_column, format, tagger):
     tagger.predict(sentences)
 
     # Extract entities
-    extraction_method = {
+    extract = {
         COLUMN_PER_ENTITY_FORMAT: get_columns_per_entity_rows,
         JSON_KEY_PER_ENTITY_FORMAT: get_json_key_per_entity_rows,
         JSON_LABELING_FORMAT: get_json_labeling_rows
     }[format]
-    rows = extraction_method(sentences)
+    rows = extract(sentences)
 
     entity_df = pd.DataFrame(rows)
 

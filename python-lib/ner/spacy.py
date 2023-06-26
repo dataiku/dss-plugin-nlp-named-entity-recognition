@@ -40,12 +40,12 @@ def extract_entities(text_column, format, language: str):
     nlp = get_spacy_model(language=language)
     docs = nlp.pipe(text_column.values, n_process=-1, batch_size=100)
     # Extract entities
-    extraction_method = {
+    extract = {
         COLUMN_PER_ENTITY_FORMAT: get_columns_per_entity_rows,
         JSON_KEY_PER_ENTITY_FORMAT: get_json_key_per_entity_rows,
         JSON_LABELING_FORMAT: get_json_labeling_rows
     }[format]
-    rows = extraction_method(docs)
+    rows = extract(docs)
 
     entity_df = pd.DataFrame(rows)
 
