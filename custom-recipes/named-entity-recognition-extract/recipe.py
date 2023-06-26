@@ -9,7 +9,7 @@ from dku_io_utils import process_dataset_chunks
 from ner.constants import (
     COLUMN_PER_ENTITY_FORMAT,
     JSON_KEY_PER_ENTITY_FORMAT,
-    JSON_LABELLING_FORMAT
+    JSON_LABELING_FORMAT
 )
 
 #############################
@@ -43,7 +43,7 @@ if advanced_settings:
         output_format = (
             JSON_KEY_PER_ENTITY_FORMAT
             if recipe_config.get("output_json_format", "standard") == "standard"
-            else JSON_LABELLING_FORMAT
+            else JSON_LABELING_FORMAT
         )
 
 if ner_model == "spacy":

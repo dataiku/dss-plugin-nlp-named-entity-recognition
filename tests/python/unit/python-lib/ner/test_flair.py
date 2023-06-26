@@ -6,7 +6,7 @@ from flair.models import SequenceTagger
 from ner.constants import (
     COLUMN_PER_ENTITY_FORMAT,
     JSON_KEY_PER_ENTITY_FORMAT,
-    JSON_LABELLING_FORMAT
+    JSON_LABELING_FORMAT
 )
 from ner.flair import extract_entities
 
@@ -16,7 +16,7 @@ def test_extract_entities():
     tagger = SequenceTagger.load("flair/ner-english-fast@3d3d35790f78a00ef319939b9004209d1d05f788")
     df = pd.DataFrame({'text': [TEST_SENTENCE]})
     pd.testing.assert_frame_equal(
-        extract_entities(df['text'], JSON_LABELLING_FORMAT, tagger),
+        extract_entities(df['text'], JSON_LABELING_FORMAT, tagger),
         pd.DataFrame({
             'sentence': [TEST_SENTENCE],
             'entities': json.dumps([

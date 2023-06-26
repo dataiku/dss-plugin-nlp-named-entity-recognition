@@ -4,7 +4,7 @@ import pandas as pd
 from ner.constants import (
     COLUMN_PER_ENTITY_FORMAT,
     JSON_KEY_PER_ENTITY_FORMAT,
-    JSON_LABELLING_FORMAT
+    JSON_LABELING_FORMAT
 )
 from ner.spacy import extract_entities
 
@@ -14,7 +14,7 @@ TEST_SENTENCE = "Mark Zuckerberg is one of the founders of Facebook, a company f
 def test_extract_entities():
     df = pd.DataFrame({'text': [TEST_SENTENCE]})
     pd.testing.assert_frame_equal(
-        extract_entities(df['text'], JSON_LABELLING_FORMAT, "en"),
+        extract_entities(df['text'], JSON_LABELING_FORMAT, "en"),
         pd.DataFrame({
             'sentence': [TEST_SENTENCE],
             'entities': json.dumps([

@@ -7,7 +7,7 @@ import pandas as pd
 from .constants import (
     COLUMN_PER_ENTITY_FORMAT,
     JSON_KEY_PER_ENTITY_FORMAT,
-    JSON_LABELLING_FORMAT
+    JSON_LABELING_FORMAT
 )
 
 
@@ -22,7 +22,7 @@ def extract_entities(text_column, format, tagger):
     extraction_method = {
         COLUMN_PER_ENTITY_FORMAT: get_columns_per_entity_rows,
         JSON_KEY_PER_ENTITY_FORMAT: get_json_key_per_entity_rows,
-        JSON_LABELLING_FORMAT: get_json_labeling_rows
+        JSON_LABELING_FORMAT: get_json_labeling_rows
     }[format]
     rows = extraction_method(sentences)
 
