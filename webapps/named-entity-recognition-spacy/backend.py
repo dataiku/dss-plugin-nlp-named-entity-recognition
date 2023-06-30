@@ -3,7 +3,7 @@ import json
 from flask import request
 from spacy import displacy
 
-from ner_utils_spacy import get_spacy_model
+from ner.spacy import get_spacy_model
 
 
 @app.route("/run_NER")  # noqa
