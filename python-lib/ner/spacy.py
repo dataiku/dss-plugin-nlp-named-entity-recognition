@@ -23,7 +23,7 @@ SPACY_LANGUAGE_MODELS_LEGACY_MAPPING = {
 }
 
 def get_model(model_id: str):
-    return spacy.load(SPACY_LANGUAGE_MODELS_LEGACY_MAPPING.get(model_id, None), exclude=["tok2vec", "tagger", "parser", "attribute_ruler", "lemmatizer"])
+    return spacy.load(SPACY_LANGUAGE_MODELS_LEGACY_MAPPING[model_id], exclude=["tok2vec", "tagger", "parser", "attribute_ruler", "lemmatizer"])
     
 def extract_entities(text_column, format, model_id: str):
     # Tag sentences
