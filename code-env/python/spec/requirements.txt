@@ -4,7 +4,7 @@ flair==0.11.3
 # flair ontonotes pre-trained model do not have compatible version for torch>=2 and flair==0.11.3, see https://huggingface.co/flair/ner-english-ontonotes-fast/discussions/1
 # also align torch version with rest of dss (especially to avoid potential cuda runtime compatibility issues)
 torch==1.9.1; platform_system == "Darwin"
-torch==1.9.1+cu111; platform_system != "Darwin"
+torch==1.13.1; platform_system != "Darwin"
 --find-links https://download.pytorch.org/whl/torch_stable.html
 
 # 'gensim' didn't support python 3.10 and 3.11 prior to v4.3.0 (Dec 21, 2022)
