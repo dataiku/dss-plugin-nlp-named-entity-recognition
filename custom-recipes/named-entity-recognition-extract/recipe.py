@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import json
+import logging
 import multiprocessing
 
 import dataiku
@@ -48,13 +50,12 @@ if advanced_settings:
 
 if ner_model == "spacy":
     from ner.spacy import extract_entities
-
-    language = recipe_config.get("text_language_spacy", "en")
+    model_id = recipe_config.get("text_language_spacy", "en")
 else:
-    from flair.models import SequenceTagger
+    import flair
     from ner.flair import extract_entities
-    
-    tagger = SequenceTagger.load("flair/ner-english-fast@3d3d35790f78a00ef319939b9004209d1d05f788")
+    model_id = recipe_config.get("text_language_flair", "en")
+    flair.device = recipe_config.get("flair_device", "cpu")
 
 #############################
 # Main Loop
@@ -62,20 +63,18 @@ else:
 
 
 def compute_entities_df(df):
-    if ner_model == "spacy":
-        out_df = extract_entities(df[text_column_name].fillna(" "), format=output_format, language=language)
-    else:
-        out_df = extract_entities(df[text_column_name].fillna(" "), format=output_format, tagger=tagger)
+    out_df = extract_entities(df[text_column_name].fillna(" "), format=output_format, model_id=model_id)
     df = df.reset_index(drop=True)
     out_df = out_df.reset_index(drop=True)
     out_df = df.merge(out_df, left_index=True, right_index=True)
     return out_df
 
 if __name__ == '__main__':
+    logging.info("Configuration:\n%s", json.dumps(recipe_config, indent=4))
     if ner_model == "spacy":
         chunksize = 200 * multiprocessing.cpu_count()
     else:
-        chunksize = 100
+        chunksize = 1000
 
     process_dataset_chunks(
         input_dataset=input_dataset, output_dataset=output_dataset, func=compute_entities_df, chunksize=chunksize

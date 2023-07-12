@@ -2,6 +2,7 @@
 import json
 
 from flair.data import Sentence
+from flair.models import SequenceTagger
 import pandas as pd
 
 from .constants import (
@@ -10,9 +11,38 @@ from .constants import (
     JSON_LABELING_FORMAT
 )
 
+# backward compatibility
+model_provider = None
 
-def extract_entities(text_column, format, tagger):
+try:
+    from dataiku.core.model_provider import get_model_provider
+    model_provider = get_model_provider()
+except ImportError:
+    pass
+
+
+FLAIR_LANGUAGE_MODELS_LEGACY_MAPPING = {
+    "en": "flair/ner-english-fast@3d3d35790f78a00ef319939b9004209d1d05f788",
+}
+
+FLAIR_MODEL_PROVIDER_MAPPING = {
+    "ner_english_ontonotes_fast": "flair/ner-english-ontonotes-fast@38a8eb6a720791da55e15962c36a37dd8d8270b2",
+}
+
+
+def get_model(model_id: str):
+    language_model = FLAIR_LANGUAGE_MODELS_LEGACY_MAPPING.get(model_id, None)
+    if language_model is not None:
+        # those models are downloaded on resources init
+        model_path = language_model
+    elif model_provider is not None:
+        # dl model with provider at hugging face proper location, return pytorch bin path
+        model_path = "%s/pytorch_model.bin" % model_provider.get_or_download_model(FLAIR_MODEL_PROVIDER_MAPPING[model_id])
+    return SequenceTagger.load(model_path)
+
+def extract_entities(text_column, format, model_id):
     # Create Sentences
+    tagger = get_model(model_id)
     sentences = [Sentence(text, use_tokenizer=True) for text in text_column.values]
 
     # Tag Sentences
