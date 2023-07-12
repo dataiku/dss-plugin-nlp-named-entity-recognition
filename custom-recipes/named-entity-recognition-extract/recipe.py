@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import json
+import logging
 import multiprocessing
 
 import dataiku
@@ -68,6 +70,7 @@ def compute_entities_df(df):
     return out_df
 
 if __name__ == '__main__':
+    logging.info("Configuration:\n%s", json.dumps(recipe_config, indent=4))
     if ner_model == "spacy":
         chunksize = 200 * multiprocessing.cpu_count()
     else:
