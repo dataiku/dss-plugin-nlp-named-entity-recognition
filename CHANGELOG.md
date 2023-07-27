@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 2.1.0 - Feature release - 2023-07-27
+- Support labeling json output format
+- Add cuda option for flair
+- Add flair ontonotes model
+
 ## Version 2.0.1 - Patch release - 2023-04-25
 - Fix bug that disabled alternative languages
 - Support python 3.8 and python 3.9
