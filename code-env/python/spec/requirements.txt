@@ -16,7 +16,7 @@ numpy==1.19.5; python_version < '3.8'
 numpy>1.19,<1.24; python_version >= '3.8'
 tokenizers==0.10.3; python_version == '3.6'
 sudachipy==0.6.0; python_version == '3.6'
-tqdm==4.50.0
+tqdm==4.66.3
 
 typing_extensions<4.6.0 # https://github.com/explosion/spaCy/issues/12659 => remove when spacy is bumped
 
