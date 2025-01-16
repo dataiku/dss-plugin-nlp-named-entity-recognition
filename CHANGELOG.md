@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 2.1.1 - Patch release - 2025-01-16
+- Fix plugin installation on python 3.7 and python 3.8
+
 ## Version 2.1.0 - Feature release - 2023-07-27
 - Support labeling json output format
 - Add cuda option for flair
