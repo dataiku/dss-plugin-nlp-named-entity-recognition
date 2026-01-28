@@ -38,6 +38,8 @@ def get_model(model_id: str):
     elif model_provider is not None:
         # dl model with provider at hugging face proper location, return pytorch bin path
         model_path = "%s/pytorch_model.bin" % model_provider.get_or_download_model(FLAIR_MODEL_PROVIDER_MAPPING[model_id])
+    else:
+        raise KeyError("Unknown model_id '{}'. Available: {}".format(model_id, list(FLAIR_LANGUAGE_MODELS_LEGACY_MAPPING.keys())))
     return SequenceTagger.load(model_path)
 
 def extract_entities(text_column, format, model_id):
