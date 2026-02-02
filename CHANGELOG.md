@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 2.1.2 - Patch release - 2026-02-02
+- Support python 3.10, 3.11, 3.12 and 3.13
+- Fix webapp loading issue with python 3.9
+
 ## Version 2.1.1 - Patch release - 2025-01-16
 - Fix plugin installation on python 3.7 and python 3.8
 

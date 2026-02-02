@@ -56,15 +56,21 @@ dist-clean:
 
 # Docker-based unit tests for Linux environment
 # Uses --platform linux/amd64 to ensure consistent behavior on Apple Silicon
+#
+# Usage:
+#   make docker-test-py310              # Without cache (default, CI)
+#   make docker-test-py310 USE_CACHE=true  # With pip cache (faster local iteration)
 
 DOCKER_IMAGE_NAME=nlp-ner-test
 DOCKER_PLATFORM=linux/amd64
+USE_CACHE?=false
 
 define run-docker-test
-	@echo "[START] Running unit tests in Docker with Python $(1)..."
+	@echo "[START] Running unit tests in Docker with Python $(1) (USE_CACHE=$(USE_CACHE))..."
 	@docker build \
 		--platform $(DOCKER_PLATFORM) \
 		--build-arg PYTHON_VERSION=$(1) \
+		--build-arg USE_CACHE=$(USE_CACHE) \
 		-t $(DOCKER_IMAGE_NAME):py$(1) \
 		-f tests/docker/Dockerfile \
 		. && \
@@ -96,8 +102,31 @@ docker-test-py312:
 docker-test-py313:
 	$(call run-docker-test,3.13)
 
-docker-test-all: docker-test-py36 docker-test-py37 docker-test-py38 docker-test-py39 docker-test-py310 docker-test-py311 docker-test-py312 docker-test-py313
-	@echo "[SUCCESS] All Docker tests completed"
+# Run all tests with summary (continues on failure, reports at end)
+PYTHON_VERSIONS = 3.6 3.7 3.8 3.9 3.10 3.11 3.12 3.13
+
+docker-test-all:
+	@failed=""; passed=""; \
+	for ver in $(PYTHON_VERSIONS); do \
+		echo ""; \
+		echo "############################################"; \
+		echo "# Testing Python $$ver"; \
+		echo "############################################"; \
+		target="docker-test-py$$(echo $$ver | tr -d '.')"; \
+		if $(MAKE) $$target USE_CACHE=$(USE_CACHE); then \
+			passed="$$passed $$ver"; \
+		else \
+			failed="$$failed $$ver"; \
+		fi; \
+	done; \
+	echo ""; \
+	echo "############################################"; \
+	echo "#              TEST SUMMARY"; \
+	echo "############################################"; \
+	if [ -n "$$passed" ]; then echo "PASSED:$$passed"; fi; \
+	if [ -n "$$failed" ]; then echo "FAILED:$$failed"; fi; \
+	echo "############################################"; \
+	if [ -n "$$failed" ]; then exit 1; fi
 
 docker-clean:
 	@echo "Removing Docker test images..."

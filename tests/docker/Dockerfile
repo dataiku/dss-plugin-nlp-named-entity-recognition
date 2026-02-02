@@ -11,10 +11,25 @@ WORKDIR /plugin
 COPY code-env/python/spec/requirements.txt /plugin/requirements-plugin.txt
 COPY tests/python/unit/requirements.txt /plugin/requirements-test.txt
 
-# Install dependencies
-RUN pip install --upgrade pip && \
-    pip install --no-cache-dir -r requirements-test.txt && \
-    pip install --no-cache-dir -r requirements-plugin.txt
+# USE_CACHE=true enables BuildKit pip cache for faster local iteration
+# USE_CACHE=false (default) uses --no-cache-dir for clean CI builds
+ARG PYTHON_VERSION
+ARG USE_CACHE=false
+
+# Install dependencies without cache (default, CI)
+RUN if [ "$USE_CACHE" != "true" ]; then \
+      pip install --upgrade pip && \
+      pip install --no-cache-dir -r requirements-test.txt && \
+      pip install --no-cache-dir -r requirements-plugin.txt; \
+    fi
+
+# Install dependencies with BuildKit cache mount (local dev)
+RUN --mount=type=cache,target=/root/.cache/pip,id=pip-${PYTHON_VERSION} \
+    if [ "$USE_CACHE" = "true" ]; then \
+      pip install --upgrade pip && \
+      pip install -r requirements-test.txt && \
+      pip install -r requirements-plugin.txt; \
+    fi
 
 # Copy source code and resources
 COPY python-lib/ /plugin/python-lib/
